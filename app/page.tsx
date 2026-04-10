@@ -1,90 +1,120 @@
 import { createClient } from '@supabase/supabase-js';
-import { ArrowUpRight, BarChart3, Target, Zap } from 'lucide-react';
+import { ArrowUpRight, BarChart3, Target, Zap, Mail, Linkedin } from 'lucide-react';
 
-// This section safely checks for your keys
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-
-// Only try to connect if the keys exist
-const supabase = supabaseUrl && supabaseAnonKey 
-  ? createClient(supabaseUrl, supabaseAnonKey) 
-  : null;
+const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
 
 export default async function Home() {
   let projects = [];
-
-  // Try to get data, but don't crash if it fails during the build
   if (supabase) {
-    try {
-      const { data } = await supabase.from('projects').select('*');
-      projects = data || [];
-    } catch (e) {
-      console.error("Supabase error:", e);
-    }
+    const { data } = await supabase.from('projects').select('*').order('id', { ascending: true });
+    projects = data || [];
   }
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] text-black px-6 md:px-20 font-sans selection:bg-blue-100 uppercase tracking-tight">
-      <nav className="py-12 flex justify-between items-center border-b border-neutral-100">
-        <span className="text-xl font-black tracking-tighter uppercase font-sans">Debasis Chowdhury <span className="text-blue-600">.</span></span>
+      {/* Navigation */}
+      <nav className="py-10 flex justify-between items-center border-b border-neutral-100">
+        <span className="text-lg font-black tracking-tighter uppercase">Debasis Chowdhury <span className="text-blue-600">.</span></span>
         <div className="flex gap-8 text-[10px] font-bold tracking-[0.2em] text-neutral-400">
-          <a href="#work" className="hover:text-black transition-colors">Work</a>
-          <a href="mailto:debasischowdhury@icloud.com" className="hover:text-black transition-colors underline underline-offset-4 decoration-blue-500">Contact</a>
+          <a href="#work" className="hover:text-black transition-colors">Experience</a>
+          <a href="#about" className="hover:text-black transition-colors">Focus</a>
+          <a href="mailto:debasischowdhury@icloud.com" className="hover:text-black transition-colors underline underline-offset-4 decoration-blue-500">Connect</a>
         </div>
       </nav>
 
+      {/* Hero Section */}
       <section className="py-32">
-        <div className="mb-10 flex items-center gap-3 text-sans">
+        <div className="mb-10 flex items-center gap-3">
           <span className="h-[1px] w-12 bg-blue-600"></span>
-          <span className="font-mono text-[10px] font-bold tracking-[0.4em] text-blue-600">Revenue & Growth Manager</span>
+          <span className="font-mono text-[10px] font-bold tracking-[0.4em] text-blue-600 uppercase">Revenue & Growth Strategist</span>
         </div>
-        <h1 className="text-7xl md:text-[110px] font-bold tracking-tighter leading-[0.85] mb-12 font-sans">
-          REVENUE <br /> ANALYTICS<span className="text-neutral-200">.</span>
+        <h1 className="text-6xl md:text-[110px] font-bold tracking-tighter leading-[0.85] mb-12">
+          DRIVING DIGITAL <br /> REVENUE<span className="text-neutral-200">.</span>
         </h1>
-        <p className="text-2xl md:text-3xl text-neutral-500 max-w-4xl leading-tight font-medium lowercase font-sans">
-          Master of Analytics student at <span className="text-black uppercase">AUT</span>. 11+ years experience driving digital transformation and growth strategy.
-        </p>
+        <div className="grid md:grid-cols-2 gap-12 border-t border-neutral-100 pt-12">
+          <p className="text-2xl md:text-3xl text-neutral-500 leading-tight font-medium lowercase">
+            11+ years experience in <span className="text-black uppercase">Customer Lifecycle Management</span> & digital transformation. Currently bridging business strategy with advanced data analytics at <span className="text-black uppercase">AUT</span>.
+          </p>
+          <div className="flex flex-col justify-end items-start md:items-end gap-2">
+            <span className="text-4xl font-black italic text-blue-600 tracking-tighter">+24% REV UPLIFT</span>
+            <span className="text-[10px] font-bold text-neutral-400 tracking-widest uppercase text-right">Validated Career Impact</span>
+          </div>
+        </div>
       </section>
 
-      <section id="work" className="py-20 border-t border-black font-sans">
-        <div className="flex justify-between items-end mb-16">
-          <h2 className="text-[10px] font-bold tracking-[0.4em] text-neutral-400">Selected Case Studies</h2>
+      {/* Skills Grid */}
+      <section id="about" className="grid md:grid-cols-3 gap-12 py-24 border-y border-neutral-100 bg-neutral-50/50 px-6 -mx-6 md:-mx-20 md:px-20">
+        <div className="space-y-4">
+          <BarChart3 className="text-blue-600" size={32} />
+          <h3 className="font-bold text-xs tracking-[0.2em] uppercase">Advanced Analytics</h3>
+          <p className="text-[11px] text-neutral-500 leading-relaxed lowercase font-normal">Master of Analytics (AUT) — focusing on predictive modeling, SQL, and Power BI for revenue optimization.</p>
         </div>
-        
+        <div className="space-y-4">
+          <Target className="text-blue-600" size={32} />
+          <h3 className="font-bold text-xs tracking-[0.2em] uppercase">Growth Strategy</h3>
+          <p className="text-[11px] text-neutral-500 leading-relaxed lowercase font-normal">Expertise in ARPU growth, LTV maximization, and GTM execution across DTH, Telecom, and eCommerce.</p>
+        </div>
+        <div className="space-y-4">
+          <Zap className="text-blue-600" size={32} />
+          <h3 className="font-bold text-xs tracking-[0.2em] uppercase">Retention Ops</h3>
+          <p className="text-[11px] text-neutral-500 leading-relaxed lowercase font-normal">Six Sigma Black Belt — automating CX operations and reducing service turnaround by 60%.</p>
+        </div>
+      </section>
+
+      {/* Experience / Projects from Supabase */}
+      <section id="work" className="py-32">
+        <h2 className="text-[10px] font-bold tracking-[0.4em] text-neutral-400 mb-16 uppercase">Selected Career Milestones</h2>
         <div className="space-y-0">
-          {projects.length > 0 ? (
-            projects.map((project: any) => (
-              <div key={project.id} className="group border-b border-neutral-200 py-16 grid md:grid-cols-12 gap-8 hover:bg-neutral-50 transition-all px-4">
-                <div className="md:col-span-5">
-                  <span className="text-[10px] font-bold tracking-widest text-blue-600 mb-4 block underline decoration-2 underline-offset-4">{project.category}</span>
-                  <h3 className="text-5xl font-bold tracking-tighter uppercase">{project.title}</h3>
-                </div>
-                <div className="md:col-span-7 flex flex-col justify-between">
-                  <p className="text-xl text-neutral-600 mb-8 leading-tight lowercase font-medium">{project.problem}</p>
-                  <div className="flex justify-between items-center">
-                     <div className="flex flex-col">
-                       <span className="text-3xl font-black italic tracking-tighter text-blue-600">{project.metrics}</span>
-                       <span className="text-[8px] font-bold text-neutral-300 tracking-[0.2em]">Validated Impact</span>
-                     </div>
-                     <div className="bg-black p-4 rounded-full text-white group-hover:bg-blue-600 transition-colors">
-                      <ArrowUpRight size={24} />
-                     </div>
-                  </div>
+          {projects.map((project: any) => (
+            <div key={project.id} className="group border-b border-neutral-200 py-20 grid md:grid-cols-12 gap-8 hover:bg-white transition-all">
+              <div className="md:col-span-5">
+                <span className="text-[10px] font-bold tracking-widest text-blue-600 mb-4 block underline decoration-2 underline-offset-4">{project.category}</span>
+                <h3 className="text-5xl font-bold tracking-tighter uppercase">{project.title}</h3>
+              </div>
+              <div className="md:col-span-7 flex flex-col justify-between">
+                <p className="text-xl text-neutral-600 mb-8 leading-tight lowercase font-medium">{project.problem}</p>
+                <div className="flex justify-between items-center">
+                   <div className="flex flex-col">
+                     <span className="text-3xl font-black italic tracking-tighter text-blue-600 uppercase">{project.metrics}</span>
+                     <span className="text-[8px] font-bold text-neutral-300 tracking-[0.2em] uppercase">Key Performance Indicator</span>
+                   </div>
+                   <div className="bg-black p-4 text-white group-hover:bg-blue-600 transition-colors">
+                    <ArrowUpRight size={24} />
+                   </div>
                 </div>
               </div>
-            ))
-          ) : (
-            <p className="text-neutral-400 lowercase italic text-sm">Waiting for project data...</p>
-          )}
+            </div>
+          ))}
         </div>
       </section>
 
-      <footer className="py-20 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-bold tracking-widest text-neutral-400 border-t border-neutral-100 font-sans">
-        <span>© 2024 DEBASIS CHOWDHURY — AUCKLAND, NZ</span>
-        <div className="flex gap-12">
-          <a href="https://linkedin.com/in/debasischowdhury" className="hover:text-black transition-colors">LinkedIn</a>
-          <a href="mailto:debasischowdhury@icloud.com" className="hover:text-black transition-colors">Email</a>
+      {/* Contact Section */}
+      <section className="bg-black text-white py-32 px-6 -mx-6 md:-mx-20 md:px-20">
+        <div className="max-w-4xl">
+          <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-12">LET'S DRIVE <br /> GROWTH<span className="text-blue-600">.</span></h2>
+          <div className="grid md:grid-cols-2 gap-16">
+            <div className="space-y-6">
+              <p className="text-neutral-400 lowercase font-medium text-lg leading-relaxed">
+                Currently based in Auckland, NZ. Open to strategic opportunities where data meets customer lifecycle leadership.
+              </p>
+              <div className="flex gap-6">
+                <a href="mailto:debasischowdhury@icloud.com" className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest hover:text-blue-400 transition-colors">
+                  <Mail size={16} /> Email
+                </a>
+                <a href="https://linkedin.com/in/debasischowdhury" className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest hover:text-blue-400 transition-colors">
+                  <Linkedin size={16} /> LinkedIn
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
+
+      <footer className="py-12 flex justify-between items-center text-[9px] font-bold tracking-widest text-neutral-400 border-t border-neutral-100">
+        <span>© 2024 DEBASIS CHOWDHURY — MASTER OF ANALYTICS AT AUT</span>
+        <span className="hidden md:block">BUILT WITH PRECISION</span>
       </footer>
     </div>
   );
